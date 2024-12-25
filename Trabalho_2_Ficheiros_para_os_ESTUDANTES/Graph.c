@@ -140,26 +140,27 @@ Graph* GraphCreateTranspose(const Graph* g) {
   // COMPLETE THE CODE
 
   Graph* TGraph = GraphCreate(g->numVertices,g->isDigraph,g->isWeighted);
-  int vertices = TGraph->numVertices;
-  List* vertList = g->verticesList;
-  ListMoveToHead(vertList);
+  List* vertices = g->verticesList;
+  ListMoveToHead(vertices);
+  unsigned int i = 0;
 
-  for(int i = 0; i < vertices; ListMoveToNext(vertList), i++){
-    struct _Vertex* v = ListGetCurrentItem(vertList);
+  for(; i < TGraph->numVertices; ListMoveToNext(vertices), i++){
+    struct _Vertex* v = ListGetCurrentItem(vertices);
     List* arestas = v->edgesList;
     ListMoveToHead(arestas);
-    for(int j = 0; j < ListGetSize(arestas);ListMoveToNext(arestas), j++){
+    unsigned int j = 0;
+
+    for(; j < ListGetSize(arestas);ListMoveToNext(arestas), j++){
       struct _Edge* a = ListGetCurrentItem(arestas);
+      
       if(g->isWeighted){
         GraphAddWeightedEdge(TGraph,a->adjVertex,v->id,a->weight);
       }else{
         GraphAddEdge(TGraph,a->adjVertex,v->id);
       }
     }
-    return TGraph;
   }
-
-  return NULL;
+  return TGraph;
 }
 
 void GraphDestroy(Graph** p) {
