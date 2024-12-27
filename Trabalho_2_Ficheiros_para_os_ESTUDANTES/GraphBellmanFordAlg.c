@@ -6,10 +6,10 @@
 // GraphBellmanFord - Bellman-Ford Algorithm
 //
 
-// Student Name :
-// Student Number :
-// Student Name :
-// Student Number :
+// Student Name : Joana Santiago 
+// Student Number : 119705
+// Student Name : Raquel Meira
+// Student Number : 118928
 
 /*** COMPLETE THE GraphBellmanFordAlgExecute FUNCTION ***/
 
@@ -66,7 +66,38 @@ GraphBellmanFordAlg* GraphBellmanFordAlgExecute(Graph* g,
   
   // THE ALGORTIHM TO BUILD THE SHORTEST-PATHS TREE
 
-  return NULL;
+  result->marked = (int*)malloc(numVertices * sizeof(int));
+  result->distance = (int*)malloc(numVertices * sizeof(int));
+  result->predecessor = (int*)malloc(numVertices * sizeof(int));
+
+  unsigned int i = 0;
+  for(; i < numVertices; i++){
+    result->marked[i] = 0;
+    result->distance[i] = numVertices;
+    result->predecessor[i] = -1;
+  }
+
+  result->distance[result->startVertex] = 0;
+
+  for(i = 0; i < numVertices - 1; i++){
+    int* adjVertices = GraphGetAdjacentsTo(g, i);
+
+    for (int j = 0; j < adjVertices[0]; j++) { 
+      int vertice = adjVertices[j+1];
+      if (result->distance[vertice] > result->distance[i] + 1) {
+        result->distance[vertice] = result->distance[i] + 1;
+        result->predecessor[vertice] = i;
+        result->marked[vertice] = 1;
+      }
+    }
+  }
+
+  for(i = 0; i < numVertices; i++){
+    if (result->marked[i] == 0 && i != result->startVertex)
+      result->distance[i] = -1;
+  }
+
+  return result;
 }
 
 void GraphBellmanFordAlgDestroy(GraphBellmanFordAlg** p) {
@@ -147,6 +178,7 @@ void GraphBellmanFordAlgDisplayDOT(const GraphBellmanFordAlg* p) {
   for (unsigned int w = 0; w < num_vertices; w++) {
     // Vertex w has a predecessor vertex v?
     int v = p->predecessor[w];
+    printf("V %d; W %d; D %d\n", v, w, p->distance[w]);
     if (v != -1) {
       GraphAddEdge(paths_tree, (unsigned int)v, w);
     }
