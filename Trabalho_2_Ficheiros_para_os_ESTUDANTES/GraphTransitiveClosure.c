@@ -33,25 +33,25 @@ Graph* GraphComputeTransitiveClosure(Graph* g) {
 
   // COMPLETE THE CODE
 
-  int numVertices = GraphGetNumVertices(g);
+  int numVertices = GraphGetNumVertices(g);                                 // Get number of vertices
 
-  Graph* TransitiveClosure = GraphCreate(numVertices, 1, 0);
+  Graph* TransitiveClosure = GraphCreate(numVertices, 1, 0);                // Create a new Graph for the Transitive Closure Graph with the same number of vertices of the initial graph
   
 
-  for (int u = 0; u < numVertices; u++){
-    GraphBellmanFordAlg* result = GraphBellmanFordAlgExecute(g,u);
+  for (int u = 0; u < numVertices; u++){                                    // Iterate every vertex u
+    GraphBellmanFordAlg* result = GraphBellmanFordAlgExecute(g,u);          // Execute the Bellman-Ford Algorithm to get all the reachable vertices from u
 
-    for (int v = 0; v < numVertices; v++) {
-      if (GraphBellmanFordAlgReached(result, v)) {
+    for (int v = 0; v < numVertices; v++) {                                 // For every U and v, if v is reachable from u,
+      if (GraphBellmanFordAlgReached(result, v)) {                          //add to the new transitive closure graph the (u,v) edge
         GraphAddEdge(TransitiveClosure, u, v);
       }
     }
 
-  GraphDestroy(&result);
+  GraphDestroy(&result);                                                   // Housekeeping
 
 
   }
 
 
-  return TransitiveClosure;
+  return TransitiveClosure;                                                // Return the new Graph
 }
