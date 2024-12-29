@@ -46,7 +46,7 @@ Graph* GraphComputeTransitiveClosure(Graph* g) {
       }
     }
 
-  GraphDestroy(&result);                                                   // Housekeeping
+  GraphBellmanFordAlgDestroy(&result);                                                   // Housekeeping
 
 
   }

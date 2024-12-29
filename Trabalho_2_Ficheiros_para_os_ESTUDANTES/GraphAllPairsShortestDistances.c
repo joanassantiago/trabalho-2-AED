@@ -6,10 +6,10 @@
 // GraphAllPairsShortestDistances
 //
 
-// Student Name :
-// Student Number :
-// Student Name :
-// Student Number :
+// Student Name : Joana Santiago
+// Student Number : 119705
+// Student Name : Raquel Meira
+// Student Number : 118928
 
 /*** COMPLETE THE GraphAllPairsShortestDistancesExecute FUNCTION ***/
 
@@ -66,7 +66,11 @@ GraphAllPairsShortestDistances* GraphAllPairsShortestDistancesExecute(
     for(int v = 0; v < numVertices; v++){
 
       if(GraphBellmanFordAlgReached(bellman, v)){                              //Para cada vertice u, se o veritce v for alcançável a partir de u
+        
+      
         result->distance[u][v] = GraphBellmanFordAlgDistance(bellman, v);      //Definir a distância entre vertices e adicionar à matriz
+        
+        
 
       }
     }
@@ -116,7 +120,11 @@ void GraphAllPairsShortestDistancesPrint(
   for (unsigned int i = 0; i < numVertices; i++) {
     for (unsigned int j = 0; j < numVertices; j++) {
       int distanceIJ = p->distance[i][j];
-      if (distanceIJ == -1) {
+
+      if (i == j) {
+        // Distance from a vertex to itself is always 0
+        printf("  0");
+      } else if (distanceIJ == -1) {
         // INFINITY - j was not reached from i
         printf(" INF");
       } else {
@@ -126,3 +134,4 @@ void GraphAllPairsShortestDistancesPrint(
     printf("\n");
   }
 }
+
