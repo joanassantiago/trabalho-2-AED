@@ -37,9 +37,44 @@ GraphAllPairsShortestDistances* GraphAllPairsShortestDistancesExecute(
 
   // COMPLETE THE CODE
 
-  
+  GraphAllPairsShortestDistances* result = (GraphAllPairsShortestDistances*)malloc(sizeof(GraphAllPairsShortestDistances));   //Alocar memória para a estrutura 
+  assert(result != NULL);
 
-  return NULL;
+  int numVertices = GraphGetNumVertices(g);                                    //Obter numero de vertices do grafo
+
+  result->graph = g;
+
+  result->distance=(int**)malloc(numVertices * sizeof(int*));                  //Alocar memória para a criação da matriz de distâncias
+  assert(result->distance != NULL);
+
+  for(int l = 0; l < numVertices; l++ ){                                       //Inicializar a matriz toda a -1 (distâncias indefinidas)
+
+    result->distance[l] = (int*)malloc(numVertices * sizeof(int));
+    assert(result->distance[l] != NULL);
+
+    for (int c = 0; c < numVertices; c++){
+
+      result->distance[l][c] = -1;
+    }
+
+  }
+
+  for(int u = 0; u < numVertices; u++){                                         //Iterar sobre cada vertice u
+
+    GraphBellmanFordAlg* bellman = GraphBellmanFordAlgExecute(g,u);             //Executar o algoritmo de Bellman-Ford para obter todos os vertices alcançáveis a partit de u
+
+    for(int v = 0; v < numVertices; v++){
+
+      if(GraphBellmanFordAlgReached(bellman, v)){                              //Para cada vertice u, se o veritce v for alcançável a partir de u
+        result->distance[u][v] = GraphBellmanFordAlgDistance(bellman, v);      //Definir a distância entre vertices e adicionar à matriz
+
+      }
+    }
+
+    GraphBellmanFordAlgDestroy(&bellman);                                      //Housekeeping
+  }
+
+  return result;
 }
 
 void GraphAllPairsShortestDistancesDestroy(GraphAllPairsShortestDistances** p) {

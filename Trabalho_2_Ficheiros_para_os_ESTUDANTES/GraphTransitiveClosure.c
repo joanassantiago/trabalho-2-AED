@@ -33,16 +33,15 @@ Graph* GraphComputeTransitiveClosure(Graph* g) {
 
   // COMPLETE THE CODE
 
-  int numVertices = GraphGetNumVertices(g);                                 // Get number of vertices
+  int numVertices = GraphGetNumVertices(g);                                 // Obter o numero de vertices
 
-  Graph* TransitiveClosure = GraphCreate(numVertices, 1, 0);                // Create a new Graph for the Transitive Closure Graph with the same number of vertices of the initial graph
-  
+  Graph* TransitiveClosure = GraphCreate(numVertices, 1, 0);                // Criar um novo grafo (TransitiveClosure) com o mesmo numero de vertices que o grafo inicial 
 
-  for (int u = 0; u < numVertices; u++){                                    // Iterate every vertex u
-    GraphBellmanFordAlg* result = GraphBellmanFordAlgExecute(g,u);          // Execute the Bellman-Ford Algorithm to get all the reachable vertices from u
+  for (int u = 0; u < numVertices; u++){                                    // Iterar cada vertice u
+    GraphBellmanFordAlg* result = GraphBellmanFordAlgExecute(g,u);          // Executar o algoritmo de Bellman-Ford para obter todos os vertices alcançáveis a partir de u
 
-    for (int v = 0; v < numVertices; v++) {                                 // For every U and v, if v is reachable from u,
-      if (GraphBellmanFordAlgReached(result, v)) {                          //add to the new transitive closure graph the (u,v) edge
+    for (int v = 0; v < numVertices; v++) {                                 // Para cada vertice u, se o veritce v for alcançável a partir de u
+      if (GraphBellmanFordAlgReached(result, v)) {                          //adicionar ao grafo (TransitiveClosure) a aresta (u,v)
         GraphAddEdge(TransitiveClosure, u, v);
       }
     }
@@ -53,5 +52,5 @@ Graph* GraphComputeTransitiveClosure(Graph* g) {
   }
 
 
-  return TransitiveClosure;                                                // Return the new Graph
+  return TransitiveClosure;                                                // Retorno do grafo TransitiveClosure
 }
