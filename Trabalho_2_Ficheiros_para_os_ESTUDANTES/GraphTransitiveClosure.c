@@ -33,22 +33,30 @@ Graph* GraphComputeTransitiveClosure(Graph* g) {
 
   // COMPLETE THE CODE
 
+  InstrName[0] = "memops";
+  InstrName[1] = "ops";
+  InstrCalibrate();
+  InstrReset();
+
   int numVertices = GraphGetNumVertices(g);                                 // Obter o numero de vertices
 
   Graph* TransitiveClosure = GraphCreate(numVertices, 1, 0);                // Criar um novo grafo (TransitiveClosure) com o mesmo numero de vertices que o grafo inicial 
 
   for (int u = 0; u < numVertices; u++){                                    // Iterar cada vertice u
     GraphBellmanFordAlg* result = GraphBellmanFordAlgExecute(g,u);          // Executar o algoritmo de Bellman-Ford para obter todos os vertices alcançáveis a partir de u
+    InstrCount[0]++;
 
     for (int v = 0; v < numVertices; v++) {                                 // Para cada vertice u, se o veritce v for alcançável a partir de u
       if (GraphBellmanFordAlgReached(result, v)) {                          //adicionar ao grafo (TransitiveClosure) a aresta (u,v)
         GraphAddEdge(TransitiveClosure, u, v);
+        InstrCount[0]++;
       }
+      InstrCount[1]++;
     }
 
   GraphBellmanFordAlgDestroy(&result);                                                   // Housekeeping
 
-
+  InstrCount[1]++;
   }
 
 
