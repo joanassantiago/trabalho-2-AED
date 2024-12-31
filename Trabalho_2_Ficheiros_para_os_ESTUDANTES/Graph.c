@@ -140,29 +140,29 @@ Graph* GraphCreateTranspose(const Graph* g) {
 
   // COMPLETE THE CODE
 
-  Graph* TGraph = GraphCreate(g->numVertices,g->isDigraph,g->isWeighted);
+  Graph* TGraph = GraphCreate(g->numVertices,g->isDigraph,g->isWeighted);               // Cria um novo grafo com as mesmas caracteristicas de g
 
   InstrName[0] = "memops";
   InstrName[1] = "ops";
   InstrCalibrate();
   InstrReset();
 
-  List* vertices = g->verticesList;
-  ListMoveToHead(vertices);
+  List* vertices = g->verticesList;                                                     // Obtém a lista de vértices do grafo original
+  ListMoveToHead(vertices);                                                             // Move para o início da lista de vértices
   unsigned int i = 0;
 
   for(; i < TGraph->numVertices; ListMoveToNext(vertices), i++){
-    struct _Vertex* v = ListGetCurrentItem(vertices);
+    struct _Vertex* v = ListGetCurrentItem(vertices);                                   // Obtém o vértice atual
     InstrCount[0]++;
-    List* arestas = v->edgesList;
-    ListMoveToHead(arestas);
+    List* arestas = v->edgesList;                                                       // Obtém a lista de arestas do vértice atual
+    ListMoveToHead(arestas);                                                            // Move para o início da lista de arestas
     unsigned int j = 0;
 
     for(; j < ListGetSize(arestas);ListMoveToNext(arestas), j++){
-      struct _Edge* a = ListGetCurrentItem(arestas);
+      struct _Edge* a = ListGetCurrentItem(arestas);                                    // Obtém a aresta atual
       InstrCount[0]++; 
 
-      if(g->isWeighted){
+      if(g->isWeighted){                                                                // Adiciona a aresta invertida ao grafo transposto
         GraphAddWeightedEdge(TGraph,a->adjVertex,v->id,a->weight);
       }else{
         GraphAddEdge(TGraph,a->adjVertex,v->id);

@@ -131,13 +131,25 @@ void GraphAllPairsShortestDistancesPrint(
   unsigned int numVertices = GraphGetNumVertices(p->graph);
   printf("Graph distance matrix - %u vertices\n", numVertices);
 
+  printf("    |");
+  for (unsigned int i = 0; i < numVertices; i++) { 
+    printf(" %3d", i);
+  }
+  printf("\n-----");
+  for (unsigned int i = 0; i < numVertices; i++) { 
+    printf("----");
+  }
+  printf("\n");
+
   for (unsigned int i = 0; i < numVertices; i++) {
+    printf("%3d |", i);
+
     for (unsigned int j = 0; j < numVertices; j++) {
       int distanceIJ = p->distance[i][j];
 
       if (i == j) {
         // Distance from a vertex to itself is always 0
-        printf("  0");
+        printf("   0");
       } else if (distanceIJ == -1) {
         // INFINITY - j was not reached from i
         printf(" INF");

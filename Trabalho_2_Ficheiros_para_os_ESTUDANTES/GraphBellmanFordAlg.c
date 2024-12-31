@@ -66,35 +66,52 @@ GraphBellmanFordAlg* GraphBellmanFordAlgExecute(Graph* g,
   
   // THE ALGORTIHM TO BUILD THE SHORTEST-PATHS TREE
 
-  result->marked = (int*)malloc(numVertices * sizeof(int));
+  InstrName[0] = "memops";
+  InstrName[1] = "ops";
+  InstrCalibrate();
+  InstrReset();
+
+  result->marked = (int*)malloc(numVertices * sizeof(int));              // Inicialização dos arrays result->marked, result->distance e result->predecessor
   result->distance = (int*)malloc(numVertices * sizeof(int));
   result->predecessor = (int*)malloc(numVertices * sizeof(int));
 
+  InstrCount[0] += 3;
+
   unsigned int i = 0;
-  for(; i < numVertices; i++){
+  for(; i < numVertices; i++){                                            
     result->marked[i] = 0;
-    result->distance[i] = numVertices;
+    result->distance[i] = numVertices;                                   // Inicializa todas as distancias com o número de vértices, significando a maior distância possivel
     result->predecessor[i] = -1;
+    InstrCount[1]++;
   }
 
-  result->distance[result->startVertex] = 0;
+  result->distance[result->startVertex] = 0;                             // A distância do vertice inicial é 0
 
-  for(i = 0; i < numVertices - 1; i++){
-    int* adjVertices = GraphGetAdjacentsTo(g, i);
+  for(i = 0; i < numVertices - 1; i++){                                  // O algoritmo para construir a árvore de caminhos mais curtos
+    for (int w = 0; w < numVertices; w++) {                              // 
+      int* adjVertices = GraphGetAdjacentsTo(g, w);                      // Obtém os vértices adjacentes ao vértice
+      InstrCount[0]++;  
 
-    for (int j = 0; j < adjVertices[0]; j++) { 
-      int vertice = adjVertices[j+1];
-      if (result->distance[vertice] > result->distance[i] + 1) {
-        result->distance[vertice] = result->distance[i] + 1;
-        result->predecessor[vertice] = i;
-        result->marked[vertice] = 1;
+      for (int j = 0; j < adjVertices[0]; j++) { 
+        int vertice = adjVertices[j+1];
+        if (result->distance[w] != numVertices && result->distance[vertice] > result->distance[w] + 1) {         // Verifica se a distância pode ser relaxada
+          result->distance[vertice] = result->distance[w] + 1;             // Atualiza a distância, o predecessor e que esse vértice ja foi alcançado 
+          result->predecessor[vertice] = w;
+          result->marked[vertice] = 1;
+          InstrCount[1]++;
+        }
       }
+
+      free(adjVertices);
+      InstrCount[0]++;
     }
   }
 
-  for(i = 0; i < numVertices; i++){
-    if (result->marked[i] == 0 && i != result->startVertex)
+  for(i = 0; i < numVertices; i++){                                     // Ajusta as distâncias para vértices não alcançados
+    if (result->marked[i] == 0 && i != result->startVertex){
       result->distance[i] = -1;
+      InstrCount[1]++;
+    }
   }
 
   return result;
