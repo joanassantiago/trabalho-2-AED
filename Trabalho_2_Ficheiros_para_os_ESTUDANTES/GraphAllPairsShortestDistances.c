@@ -57,12 +57,12 @@ GraphAllPairsShortestDistances* GraphAllPairsShortestDistancesExecute(
 
     result->distance[l] = (int*)malloc(numVertices * sizeof(int));
     assert(result->distance[l] != NULL);
-    InstrCount[0]+=3;
+    InstrCount[0]++;
 
     for (int c = 0; c < numVertices; c++){
 
       result->distance[l][c] = -1;
-      InstrCount[0]+=3;
+      InstrCount[0]++;
       InstrCount[1]++;
     }
   InstrCount[1]++;
@@ -72,7 +72,7 @@ GraphAllPairsShortestDistances* GraphAllPairsShortestDistancesExecute(
   for(int u = 0; u < numVertices; u++){                                         //Iterar sobre cada vertice u
 
     GraphBellmanFordAlg* bellman = GraphBellmanFordAlgExecute(g,u);             //Executar o algoritmo de Bellman-Ford para obter todos os vertices alcançáveis a partit de u
-    InstrCount[0]+=3;
+    InstrCount[0]++;
 
     for(int v = 0; v < numVertices; v++){
 
@@ -80,7 +80,7 @@ GraphAllPairsShortestDistances* GraphAllPairsShortestDistancesExecute(
         
       
         result->distance[u][v] = GraphBellmanFordAlgDistance(bellman, v);      //Definir a distância entre vertices e adicionar à matriz
-        InstrCount[0]+=3;
+        InstrCount[0]++;
         
 
       }

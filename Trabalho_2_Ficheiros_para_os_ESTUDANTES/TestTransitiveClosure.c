@@ -25,6 +25,7 @@ int main(void) {
   GraphCheckInvariants(dig01);
 
   Graph* tcdig01 = GraphComputeTransitiveClosure(dig01);
+  
   printf("The transitive closure:\n");
   // Displaying in DOT format
   GraphDisplayDOT(tcdig01);
