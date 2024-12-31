@@ -87,15 +87,15 @@ GraphBellmanFordAlg* GraphBellmanFordAlgExecute(Graph* g,
 
   result->distance[result->startVertex] = 0;                             // A distância do vertice inicial é 0
 
-  for(i = 0; i < numVertices - 1; i++){                                  // O algoritmo para construir a árvore de caminhos mais curtos
-    for (int w = 0; w < numVertices; w++) {                              // 
+  for(i = 0; i < numVertices - 1; i++){                                  // O algoritmo vai relaxar n-1 vezes o grafo
+    for (int w = 0; w < numVertices; w++) {                              // Para cada vértice do grafo
       int* adjVertices = GraphGetAdjacentsTo(g, w);                      // Obtém os vértices adjacentes ao vértice
       InstrCount[0]++;  
 
       for (int j = 0; j < adjVertices[0]; j++) { 
         int vertice = adjVertices[j+1];
         if (result->distance[w] != numVertices && result->distance[vertice] > result->distance[w] + 1) {         // Verifica se a distância pode ser relaxada
-          result->distance[vertice] = result->distance[w] + 1;             // Atualiza a distância, o predecessor e que esse vértice ja foi alcançado 
+          result->distance[vertice] = result->distance[w] + 1;           // Atualiza a distância, o predecessor e que esse vértice ja foi alcançado 
           result->predecessor[vertice] = w;
           result->marked[vertice] = 1;
           InstrCount[1]++;
