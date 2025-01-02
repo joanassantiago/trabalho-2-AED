@@ -51,49 +51,49 @@ GraphEccentricityMeasures* GraphEccentricityMeasuresCompute(Graph* g) {
   // Allocate the central vertices array : number of central vertices + 1
   // Fill in the central vertices array
 
-  GraphEccentricityMeasures* result = (GraphEccentricityMeasures*)malloc(sizeof(struct _GraphEccentricityMeasures));
+  GraphEccentricityMeasures* result = (GraphEccentricityMeasures*)malloc(sizeof(struct _GraphEccentricityMeasures));    // Aloca nenória para a estrutura 
   assert(result != NULL);
   
   result->graph = g;
   unsigned int numVertices = GraphGetNumVertices(g);
 
-  GraphAllPairsShortestDistances* allPairsDistance = GraphAllPairsShortestDistancesExecute(g);
+  GraphAllPairsShortestDistances* allPairsDistance = GraphAllPairsShortestDistancesExecute(g);          // Inicializa a matriz de distâncias usando o módulo ALL-PAIRS-SHORTEST-DISTANCES
   assert(allPairsDistance != NULL);
 
-  result->eccentricity = (int*)malloc(numVertices * sizeof(int));
-  result->graphRadius = numVertices;
-  result->graphDiameter = 0;
+  result->eccentricity = (int*)malloc(numVertices * sizeof(int));                                      // Aloca memória para o array de excentricidade
+  result->graphRadius = numVertices;                                                                   // Inicializa o raio do grafo com o número de vértices
+  result->graphDiameter = 0;                                                                           // Inicializa o diâmetro do grafo com 0
 
   unsigned int v = 0;
-  for(;v < numVertices; v++){
-    int maxDistance = 0;
+  for(;v < numVertices; v++){                                                                          // Calcula a excentricidade de cada vértice
+    int maxDistance = 0;                                                                               // Inicializa a maior distância como 0
     for(unsigned int w = 0; w < numVertices; w++){
-      int distance = GraphGetDistanceVW(allPairsDistance,v,w);
+      int distance = GraphGetDistanceVW(allPairsDistance,v,w);                                         // Obtém a distância entre os vértices v e w
       if(distance > maxDistance){
-        maxDistance = distance;
+        maxDistance = distance;                                                                        // Atualiza a maior distância se a distância atual for maior
       }
     }
-    result->eccentricity[v] = maxDistance;
+    result->eccentricity[v] = maxDistance;                                                             // Define a excentricidade do vértice v como a maior distância encontrada
     if(result->eccentricity[v] < result->graphRadius){
-      result->graphRadius = result->eccentricity[v];
+      result->graphRadius = result->eccentricity[v];                                                   // Atualiza o raio do grafo se a excentricidade atual for menor
     }
     if(result->eccentricity[v] > result->graphDiameter){
-      result->graphDiameter = result->eccentricity[v];
+      result->graphDiameter = result->eccentricity[v];                                                 // Atualiza o diâmetro do grafo se a excentricidade atual for maior
     }
   }
 
-  unsigned int numCentralVertices = 0;
+  unsigned int numCentralVertices = 0;                                                                 // Calcula o número de vértices centrais
   for (unsigned int v = 0; v < numVertices; v++) {
     if (result->eccentricity[v] == result->graphRadius) {
       numCentralVertices++;
     }
   }
 
-  result->centralVertices = (unsigned int*)malloc((numCentralVertices + 1) * sizeof(unsigned int));
+  result->centralVertices = (unsigned int*)malloc((numCentralVertices + 1) * sizeof(unsigned int));   // Aloca memória para o array de vértices centrais
   assert(result->centralVertices != NULL);
   result->centralVertices[0] = numCentralVertices;
 
-  unsigned int index = 1;
+  unsigned int index = 1;                                                                             // Preenche o array de vértices centrais
   for (unsigned int v = 0; v < numVertices; v++) {
     if (result->eccentricity[v] == result->graphRadius) {
       result->centralVertices[index++] = v;
